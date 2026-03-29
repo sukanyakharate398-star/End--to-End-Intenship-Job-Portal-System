@@ -1,0 +1,28 @@
+# Job Portal System
+
+A complete full-stack job portal system where users can register, browse jobs, apply, and track applications. Admins can post and manage jobs.
+
+## Features
+
+- ✅ User Registration & Login with JWT
+- ✅ Browse and Search Jobs
+- ✅ Apply for Jobs (Prevents duplicates)
+- ✅ User Dashboard to track applications
+- ✅ Admin Panel to Add/Delete Jobs
+- ✅ MongoDB Database
+- ✅ Responsive UI
+
+## Tech Stack
+
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Node.js, Express
+- **Database:** MongoDB
+- **Authentication:** JWT
+
+## Installation
+
+```bash
+git clone https://github.com/YOUR_USERNAME/job-portal.git
+cd job-portal
+npm install
+npm run dev
