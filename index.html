@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPortal - Find Your Dream Job</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4CAF50;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            border: 2px solid #4CAF50;
+            background: transparent;
+            color: #4CAF50;
+        }
+        
+        .btn-outline:hover {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #da190b;
+        }
+        
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .job-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .job-card h3 {
+            color: #4CAF50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company {
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .skill-tag {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .job-footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .alert {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 5px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 1rem 0;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="loading">Loading JobPortal...</div>
+    </div>
+
+    <script>
+        const API_URL = '';
+        
+        // Helper Functions
+        function getToken() {
+            return localStorage.getItem('token');
+        }
+        
+        function getUser() {
+            const user = localStorage.getItem('user');
+            return user ? JSON.parse(user) : null;
+        }
+        
+        function setAuth(token, user) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+        
+        function clearAuth() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+        }
+        
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = message;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => alertDiv.remove(), 3000);
+        }
+        
+        async function apiCall(url, options = {}) {
+            const token = getToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            
+            const response = await fetch(url, { ...options, headers });
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'Something went wrong');
+            }
+            
+            return data;
+        }
+        
+        // Business Logic
+        async function register(name, email, password, skills) {
+            try {
+                const data = await apiCall('/api/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, email, password, skills })
+                });
+                return { success: true, message: data.message };
+            } catch (error) {
+                return { success: false, message: error.message };
+            }
+        }
+        
+        async function login(email, password) {
+            try {
+                const data = await apiCall('/api/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (data.success) {
+                    setAuth(data.token, data.user);
+                    return { success: true, user: data.user };
+                }
+                return { success: false, message: 'Login failed' };
+            } catch (error) {
+                return { success: false, message: error.message };
+            }
+        }
+        
+        async function logout() {
+            clearAuth();
+            showAlert('Logged out successfully!', 'success');
+            navigateTo('home');
+        }
+        
+        async function fetchJobs(searchQuery = '') {
+            try {
+                let url = '/api/jobs';
+                if (searchQuery) {
+                    url += `?search=${encodeURIComponent(searchQuery)}`;
+                }
+                const data = await apiCall(url);
+                return data.data || [];
+            } catch (error) {
+                showAlert('Error fetching jobs: ' + error.message, 'error');
+                return [];
+            }
+        }
+        
+        async function applyForJob(jobId) {
+            try {
+                const data = await apiCall(`/api/apply/${jobId}`, { method: 'POST' });
+                showAlert(data.message, 'success');
+                return true;
+            } catch (error) {
+                showAlert(error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function addJob(title, company, skills, description, location, salary, type) {
+            try {
+                const data = await apiCall('/api/jobs', {
+                    method: 'POST',
+                    body: JSON.stringify({ title, company, skills_required: skills, description, location, salary, type })
+                });
+                showAlert(data.message, 'success');
+                return true;
+            } catch (error) {
+                showAlert(error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function deleteJob(jobId) {
+            try {
+                const data = await apiCall(`/api/jobs/${jobId}`, { method: 'DELETE' });
+                showAlert(data.message, 'success');
+                return true;
+            } catch (error) {
+                showAlert(error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function fetchUserApplications() {
+            try {
+                const data = await apiCall('/api/applications');
+                return data.data || [];
+            } catch (error) {
+                return [];
+            }
+        }
+        
+        async function checkApplied(jobId) {
+            try {
+                const data = await apiCall(`/api/check-application/${jobId}`);
+                return data.hasApplied;
+            } catch (error) {
+                return false;
+            }
+        }
+        
+        // UI Rendering
+        let currentPage = 'home';
+        let searchQuery = '';
+        let jobsCache = [];
+        
+        async function navigateTo(page) {
+            currentPage = page;
+            searchQuery = '';
+            await renderApp();
+        }
+        
+        function renderNavbar() {
+            const user = getUser();
+            return `
+                <nav class="navbar">
+                    <div class="container nav-container">
+                        <div class="logo" onclick="navigateTo('home')">📌 JobPortal</div>
+                        <div class="nav-links">
+                            ${user ? `
+                                <button onclick="navigateTo('jobs')" class="btn btn-outline">Browse Jobs</button>
+                                <button onclick="navigateTo('dashboard')" class="btn btn-outline">Dashboard</button>
+                                ${user.role === 'admin' ? `<button onclick="navigateTo('addJob')" class="btn btn-primary">+ Add Job</button>` : ''}
+                                <span style="color: #4CAF50;">👋 ${user.name}</span>
+                                <button onclick="logout()" class="btn btn-danger">Logout</button>
+                            ` : `
+                                <button onclick="navigateTo('login')" class="btn btn-outline">Login</button>
+                                <button onclick="navigateTo('register')" class="btn btn-primary">Sign Up</button>
+                            `}
+                        </div>
+                    </div>
+                </nav>
+            `;
+        }
+        
+        async function renderHome() {
+            const jobs = await fetchJobs();
+            return `
+                <div class="hero">
+                    <div class="container">
+                        <h1>🎯 Find Your Dream Job</h1>
+                        <p>Connect with top companies and start your career journey today</p>
+                        <div>
+                            <button onclick="navigateTo('jobs')" class="btn btn-primary" style="padding: 12px 30px; font-size: 1.1rem; margin: 0.5rem;">Browse Jobs</button>
+                            <button onclick="navigateTo('register')" class="btn btn-outline" style="padding: 12px 30px; font-size: 1.1rem; background: white;">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <h2 style="text-align: center; margin: 3rem 0; color: white;">✨ Why Choose Us?</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card"><h3>🔍</h3><h3>Easy Search</h3><p>Find jobs matching your skills</p></div>
+                        <div class="stat-card"><h3>🏢</h3><h3>Top Companies</h3><p>Work with industry leaders</p></div>
+                        <div class="stat-card"><h3>📊</h3><h3>Track Progress</h3><p>Monitor your applications</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>${jobs.length}</h3>
+                        <p>Jobs Available</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function renderJobs() {
+            jobsCache = await fetchJobs(searchQuery);
+            const user = getUser();
+            
+            const appliedStatus = {};
+            if (user) {
+                for (const job of jobsCache) {
+                    appliedStatus[job._id] = await checkApplied(job._id);
+                }
+            }
+            
+            return `
+                <div class="container">
+                    <div style="margin: 2rem 0;">
+                        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search by title, company, or skills..." value="${searchQuery}">
+                    </div>
+                    <div class="jobs-grid">
+                        ${jobsCache.map(job => {
+                            const hasApplied = appliedStatus[job._id];
+                            return `
+                                <div class="job-card">
+                                    <h3>${escapeHtml(job.title)}</h3>
+                                    <div class="company">🏢 ${escapeHtml(job.company)}</div>
+                                    <div>📍 ${escapeHtml(job.location || 'Remote')}</div>
+                                    <div>💰 ${escapeHtml(job.salary || 'Negotiable')}</div>
+                                    <div>📋 ${escapeHtml(job.type || 'Full-time')}</div>
+                                    <div class="skills">
+                                        ${job.skills_required.split(',').map(skill => `<span class="skill-tag">${escapeHtml(skill.trim())}</span>`).join('')}
+                                    </div>
+                                    <p style="margin: 1rem 0; color: #666;">${escapeHtml(job.description.substring(0, 100))}...</p>
+                                    <div class="job-footer">
+                                        ${!user ? `<button onclick="navigateTo('login')" class="btn btn-primary">Login to Apply</button>` :
+                                          hasApplied ? `<button class="btn btn-outline" disabled>✓ Applied</button>` :
+                                          user.role !== 'admin' ? `<button onclick="applyForJobHandler('${job._id}')" class="btn btn-primary">Apply Now</button>` :
+                                          `<button onclick="deleteJobHandler('${job._id}')" class="btn btn-danger">Delete Job</button>`
+                                        }
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                        ${jobsCache.length === 0 ? '<div style="text-align: center; padding: 3rem; background: white; border-radius: 10px; grid-column: 1/-1;">No jobs found matching your search.</div>' : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function renderDashboard() {
+            const user = getUser();
+            if (!user) {
+                navigateTo('login');
+                return '';
+            }
+            
+            const applications = await fetchUserApplications();
+            
+            return `
+                <div class="container">
+                    <div class="stat-card" style="margin-bottom: 2rem;">
+                        <h2>Welcome, ${escapeHtml(user.name)}! 👋</h2>
+                        <p>📧 ${escapeHtml(user.email)}</p>
+                        <p>🛠️ Skills: ${escapeHtml(user.skills || 'Not specified')}</p>
+                        <p>👤 Role: ${user.role === 'admin' ? 'Administrator' : 'Job Seeker'}</p>
+                    </div>
+                    
+                    <h2 style="color: white; margin: 2rem 0;">📋 My Applications (${applications.length})</h2>
+                    <div class="jobs-grid">
+                        ${applications.map(app => `
+                            <div class="job-card">
+                                <h3>${escapeHtml(app.job_id?.title || 'Job not found')}</h3>
+                                <div class="company">🏢 ${escapeHtml(app.job_id?.company || 'Unknown')}</div>
+                                <div>Status: <span style="color: #4CAF50; font-weight: bold;">${app.status.toUpperCase()}</span></div>
+                                <div>Applied: ${new Date(app.appliedAt).toLocaleDateString()}</div>
+                            </div>
+                        `).join('')}
+                        ${applications.length === 0 ? '<div style="text-align: center; padding: 3rem; background: white; border-radius: 10px; grid-column: 1/-1;">You haven\'t applied for any jobs yet. <button onclick="navigateTo(\'jobs\')" class="btn btn-primary">Browse Jobs</button></div>' : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderAddJob() {
+            return `
+                <div class="container">
+                    <div class="form-container">
+                        <h2 style="text-align: center; margin-bottom: 2rem;">➕ Post New Job</h2>
+                        <form id="addJobForm">
+                            <div class="form-group"><label>Job Title *</label><input type="text" id="title" required></div>
+                            <div class="form-group"><label>Company Name *</label><input type="text" id="company" required></div>
+                            <div class="form-group"><label>Skills Required *</label><input type="text" id="skills" placeholder="React, JavaScript, Node.js" required></div>
+                            <div class="form-group"><label>Location</label><input type="text" id="location" placeholder="Remote / Bangalore / Mumbai"></div>
+                            <div class="form-group"><label>Salary</label><input type="text" id="salary" placeholder="₹15,000/month or ₹8-12 LPA"></div>
+                            <div class="form-group"><label>Job Type</label><select id="type"><option>Full-time</option><option>Part-time</option><option>Internship</option><option>Remote</option></select></div>
+                            <div class="form-group"><label>Description *</label><textarea id="description" rows="4" required></textarea></div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Post Job</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderLogin() {
+            return `
+                <div class="container">
+                    <div class="form-container">
+                        <h2 style="text-align: center; margin-bottom: 2rem;">🔐 Login to Your Account</h2>
+                        <form id="loginForm">
+                            <div class="form-group"><label>Email</label><input type="email" id="email" required></div>
+                            <div class="form-group"><label>Password</label><input type="password" id="password" required></div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                        </form>
+                        <p style="text-align: center; margin-top: 1rem;">Don't have an account? <a href="#" onclick="navigateTo('register')">Sign up</a></p>
+                        <p style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: #666;">Demo: admin@jobportal.com / admin123</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderRegister() {
+            return `
+                <div class="container">
+                    <div class="form-container">
+                        <h2 style="text-align: center; margin-bottom: 2rem;">📝 Create New Account</h2>
+                        <form id="registerForm">
+                            <div class="form-group"><label>Full Name</label><input type="text" id="name" required></div>
+                            <div class="form-group"><label>Email</label><input type="email" id="email" required></div>
+                            <div class="form-group"><label>Password</label><input type="password" id="password" required></div>
+                            <div class="form-group"><label>Skills (comma separated)</label><input type="text" id="skills" placeholder="React, JavaScript, Python"></div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                        </form>
+                        <p style="text-align: center; margin-top: 1rem;">Already have an account? <a href="#" onclick="navigateTo('login')">Login</a></p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        async function renderApp() {
+            const user = getUser();
+            
+            if (!user && (currentPage === 'dashboard' || currentPage === 'addJob')) {
+                currentPage = 'login';
+            }
+            
+            let content = '';
+            switch(currentPage) {
+                case 'home': content = await renderHome(); break;
+                case 'jobs': content = await renderJobs(); break;
+                case 'dashboard': content = await renderDashboard(); break;
+                case 'addJob': content = renderAddJob(); break;
+                case 'login': content = renderLogin(); break;
+                case 'register': content = renderRegister(); break;
+                default: content = await renderHome();
+            }
+            
+            document.getElementById('app').innerHTML = renderNavbar() + content;
+            
+            // Attach event listeners
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.onsubmit = async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const result = await login(email, password);
+                    showAlert(result.message || 'Login successful!', result.success ? 'success' : 'error');
+                    if (result.success) navigateTo('jobs');
+                };
+            }
+            
+            const registerForm = document.getElementById('registerForm');
+            if (registerForm) {
+                registerForm.onsubmit = async (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const skills = document.getElementById('skills').value;
+                    const result = await register(name, email, password, skills);
+                    showAlert(result.message, result.success ? 'success' : 'error');
+                    if (result.success) navigateTo('login');
+                };
+            }
+            
+            const addJobForm = document.getElementById('addJobForm');
+            if (addJobForm) {
+                addJobForm.onsubmit = async (e) => {
+                    e.preventDefault();
+                    const title = document.getElementById('title').value;
+                    const company = document.getElementById('company').value;
+                    const skills = document.getElementById('skills').value;
+                    const description = document.getElementById('description').value;
+                    const location = document.getElementById('location').value;
+                    const salary = document.getElementById('salary').value;
+                    const type = document.getElementById('type').value;
+                    const success = await addJob(title, company, skills, description, location, salary, type);
+                    if (success) navigateTo('jobs');
+                };
+            }
+            
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.oninput = (e) => {
+                    searchQuery = e.target.value;
+                    renderApp();
+                };
+            }
+        }
+        
+        // Global handlers
+        window.navigateTo = navigateTo;
+        window.applyForJobHandler = async (jobId) => {
+            await applyForJob(jobId);
+            await renderApp();
+        };
+        window.deleteJobHandler = async (jobId) => {
+            await deleteJob(jobId);
+            await renderApp();
+        };
+        window.logout = logout;
+        
+        // Start the app
+        renderApp();
+    </script>
+</body>
+</html>
